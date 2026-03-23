@@ -1,0 +1,111 @@
+# ═══════════════════════════════════════════════════════════════
+#  SecureGate — .gitignore
+# ═══════════════════════════════════════════════════════════════
+
+# ──────────────────────────────────────────
+#  Python
+# ──────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+*.egg
+dist/
+build/
+venv/
+.venv/
+env/
+.env
+.env.local
+.env.production
+pip-log.txt
+pip-delete-this-directory.txt
+.Python
+*.pyo
+*.pyd
+
+# ──────────────────────────────────────────
+#  PHP
+# ──────────────────────────────────────────
+vendor/
+composer.lock
+*.phpunit.result.cache
+.php-cs-fixer.cache
+
+# ──────────────────────────────────────────
+#  Android APK / Build
+# ──────────────────────────────────────────
+*.apk
+*.aab
+*.ap_
+*.dex
+apk/build/
+apk/.gradle/
+apk/app/build/
+apk/local.properties
+apk/.idea/
+*.keystore
+*.jks
+!debug.keystore
+
+# ──────────────────────────────────────────
+#  Zertifikate & Sicherheit
+# ──────────────────────────────────────────
+certs/
+*.pem
+*.key
+*.crt
+*.csr
+*.p12
+*.pfx
+
+# ──────────────────────────────────────────
+#  Datenbank
+# ──────────────────────────────────────────
+*.db
+*.sqlite
+*.sqlite3
+*.sql.bak
+db_backups/
+
+# ──────────────────────────────────────────
+#  Logs
+# ──────────────────────────────────────────
+logs/
+*.log
+*.log.*
+nohup.out
+
+# ──────────────────────────────────────────
+#  System & IDE
+# ──────────────────────────────────────────
+.DS_Store
+Thumbs.db
+Desktop.ini
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.settings/
+.classpath
+
+# ──────────────────────────────────────────
+#  Uploads & User-Daten
+# ──────────────────────────────────────────
+uploads/
+avatars/
+export/
+*.xlsx
+!templates/*.xlsx
+
+# ──────────────────────────────────────────
+#  Temporär
+# ──────────────────────────────────────────
+tmp/
+temp/
+*.tmp
+*.bak
+*.cache
