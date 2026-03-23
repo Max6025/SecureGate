@@ -11,7 +11,7 @@
 <!-- Status Badges -->
 ![Version](https://img.shields.io/badge/Version-1.0.0-22c55e?style=for-the-badge)
 ![Platform](https://img.shields.io/badge/Platform-Raspberry%20Pi-A22846?style=for-the-badge&logo=raspberry-pi&logoColor=white)
-![License](https://img.shields.io/badge/License-MIT-3b82f6?style=for-the-badge)
+![License](https://img.shields.io/badge/License-Apache%202.0-3b82f6?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Production%20Ready-22c55e?style=for-the-badge)
 
 <br/>
@@ -219,8 +219,8 @@ Entwickelt für den professionellen Einsatz — betrieben auf einem Raspberry Pi
 
 ```bash
 # 1. Repository klonen
-git clone https://github.com/dein-username/securegate.git
-cd securegate
+git clone https://github.com/Max6025/SecureGate.git
+cd SecureGate
 
 # 2. Python-Abhängigkeiten installieren
 pip install -r requirements.txt
@@ -440,7 +440,7 @@ SecureGate/
 
 ## 📄 Lizenz
 
-Dieses Projekt steht unter der [MIT License](LICENSE).
+Dieses Projekt steht unter der [Apache License 2.0](LICENSE).
 
 <br/>
 
