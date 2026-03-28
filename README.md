@@ -4,7 +4,7 @@
 <!--   HERO BANNER                                                  -->
 <!-- ═══════════════════════════════════════════════════════════════ -->
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0a0a0a,30:111827,60:1e3a5f,100:22c55e&height=250&section=header&text=🔐%20SecureGate&fontSize=56&fontColor=e2e8f0&fontAlignY=32&desc=Professionelles%20Zutrittskontrollsystem%20auf%20Raspberry%20Pi%20Basis&descSize=18&descColor=94a3b8&descAlignY=52&animation=fadeIn" width="100%"/>
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0a0a0a,30:111827,60:1e3a5f,100:22c55e&height=250&section=header&text=🔐%20SecureGate&fontSize=56&fontColor=e2e8f0&fontAlignY=32&desc=Multi-Room%20Zutrittskontrollsystem%20auf%20Raspberry%20Pi%20Basis&descSize=18&descColor=94a3b8&descAlignY=52&animation=fadeIn" width="100%"/>
 
 <br/>
 
@@ -18,7 +18,7 @@
 
 <p>
 <strong>SecureGate</strong> ist ein vollständiges, selbst gehostetes Zutrittskontrollsystem<br/>
-mit NFC/Smartcard-Authentifizierung, Admin-Dashboard, mobiler Scanner-App und automatisiertem Reporting.<br/>
+mit NFC/Smartcard-Authentifizierung, Multi-Room-Verwaltung, Admin-Dashboard, mobiler Scanner-App und automatisiertem Reporting.<br/>
 Entwickelt für den professionellen Einsatz — betrieben auf einem Raspberry Pi.
 </p>
 
@@ -47,38 +47,55 @@ Entwickelt für den professionellen Einsatz — betrieben auf einem Raspberry Pi
 <tr>
 <td width="50%" valign="top">
 
+### 🏢 Multi-Room-Architektur
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Bis%20zu-4%20Räume-22c55e?style=for-the-badge"/>
+</p>
+
+- Jeder Raum läuft als **eigene Flask-Instanz** (`app.py`)
+- Konfigurierbare Ports: `5000`, `5100`, `5200`, `5300`
+- CLI-Steuerung: `--port`, `--room`, `--no-reader` (für Räume ohne Hardware)
+- **Per-Room Pairing** über eigene Pairing-Dateien (`pairing_5000.json`, etc.)
+- Jeder Monitor zeigt seinen eigenen **Raumnamen** an
+- Systemd-Services: `sicherheit-raum1` bis `sicherheit-raum4`
+
+</td>
+<td width="50%" valign="top">
+
 ### 🔑 NFC / Smartcard Zutrittskontrolle
 
 <p align="center">
-  <img src="https://img.shields.io/badge/NFC-Lesen%20%26%20Schreiben-22c55e?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/NFC-Lesen%20%26%20Schreiben-3b82f6?style=for-the-badge"/>
 </p>
 
 - Unterstützt **NFC-Tags & Smartcards** zur Authentifizierung
-- **NDEF-Schreibfunktion** — Tags werden automatisch mit einer Zugangs-URL beschrieben (`https://main-max.local/admin/scan.php?auto=UID`)
-- Kartenleser-Verwaltung über ein eigenes Admin-Panel (`webseite-e.py`)
+- **NDEF-Schreibfunktion** — Tags erhalten automatisch eine Zugangs-URL
+- Kartenleser-Verwaltung über eigenes Admin-Panel (`webseite-e.py`)
 - Echtzeit-Validierung über REST-API
-- **Pairingprotokoll** zwischen Kartenleser und Hauptsystem mit pulsierendem Pairing-Code
+- **Pairingprotokoll** mit pulsierendem Pairing-Code auf dem Monitor
 
 </td>
+</tr>
+<tr>
 <td width="50%" valign="top">
 
 ### 🖥️ Admin-Dashboard & Benutzerverwaltung
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Dashboard-Multi--User%20System-3b82f6?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/Dashboard-Multi--User%20System-f59e0b?style=for-the-badge"/>
 </p>
 
-- **Rollenbasiertes Login-System** mit Berechtigungsstufen (Level 1–10+)
+- **Rollenbasiertes Login-System** — Level 1–10+
 - Administratoren (Level 10+) → vollständiges Dashboard
-- Mitarbeiter → personalisierte QR-Code-Seite mit ihrem Namen
+- Mitarbeiter → personalisierte QR-Code-Seite
 - **Gruppen-Verwaltung** mit individueller Farbzuordnung
-- **Broadcast-System** für systemweite Benachrichtigungen (via PHP-Proxy)
-- **Tagesrhythmus** — automatisch wechselnde Akzentfarben je nach Tageszeit
-- Professionelles Dark-Theme-Interface
+- **Broadcast-Tab** mit Per-Room-Steuerung und Live-Countdown (HH:MM:SS)
+- **Lockdown-Modus** — Räume einzeln sperren
+- **Zugangszeiten** mit Mittagspause und 5-Minuten-Override-Button
+- **QR-Karten Drucktool** — Benutzer wählen, Layout 1/2/4/6/8/9 pro A4-Seite
 
 </td>
-</tr>
-<tr>
 <td width="50%" valign="top">
 
 ### 📱 QR-Code Scanner (Android APK)
@@ -90,26 +107,42 @@ Entwickelt für den professionellen Einsatz — betrieben auf einem Raspberry Pi
 - Native **Android-App** (WebView-basiert) für mobiles Scannen
 - Unterstützt **QR-Code & NFC-Scan** über Kamera bzw. NFC-Chip
 - Auto-Login via URL-Parameter (`?auto=UID`)
-- NFC-Integration über `nfcScanned()` und `nfcReady()` Bridge-Funktionen
-- Ergebnis-Anzeige als **Glassmorphism-Toast-Benachrichtigungen**
+- NFC-Bridge über `nfcScanned()` und `nfcReady()`
+- **Glassmorphism-Toast-Benachrichtigungen**
 - Dark/Light-Mode Umschaltung
-- NFC-Patch über `patch-nfc.py` (dynamische `MainActivity.java`-Erkennung)
+- NFC-Patch via `patch-nfc.py` (dynamische `MainActivity.java`-Erkennung)
 
 </td>
+</tr>
+<tr>
 <td width="50%" valign="top">
 
 ### 📊 Excel-Reports & Statistiken
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Reports-7%20Sheet%20Excel-f59e0b?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/Reports-7%20Sheet%20Excel-ef4444?style=for-the-badge"/>
 </p>
 
 - Automatische Generierung von **umfassenden Excel-Reports**
-- **7 Tabellenblätter** mit verschiedenen Auswertungen und Diagrammen
+- **7 Tabellenblätter** mit Auswertungen und Diagrammen
 - Erstellt über `report.php` mit **PhpSpreadsheet**
 - Zugangsstatistiken, Benutzeraktivitäten & Zeitauswertungen
 - Exportierbar für Compliance- und Sicherheitsaudits
-- Diagramme direkt in der Excel-Datei enthalten
+
+</td>
+<td width="50%" valign="top">
+
+### ⚡ Setup-Wizard & Deployment
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Setup-One--Click%20Install-a855f7?style=for-the-badge"/>
+</p>
+
+- **`setup.sh`** — Automatische Systeminstallation
+- **`setup.php`** — Web-Wizard für Ersteinrichtung
+- Admin-Erstellung und Raum-Konfiguration mit Auto-Pairing
+- **`reset-deploy.sh`** — Kompletter System-Reset & Neuinstallation
+- Setzt Datenbank zurück, löscht alle Dateien, deployt mit korrekten Rechten
 
 </td>
 </tr>
@@ -124,28 +157,37 @@ Entwickelt für den professionellen Einsatz — betrieben auf einem Raspberry Pi
 ## 🏗️ Systemarchitektur
 
 ```
-┌──────────────────────────────────────────────────────────────────────┐
-│                        🔐 SecureGate System                         │
-│                      main-max.local (HTTPS)                         │
-├──────────────────────┬───────────────────────┬───────────────────────┤
-│                      │                       │                       │
-│   ⚙️ master-code.py  │   🔑 webseite-e.py    │   🌐 Apache + PHP     │
-│   (Flask :5000)      │   (Flask :5001)        │   (/admin/)           │
-│                      │                       │                       │
-│   • REST API         │   • Kartenleser-UI    │   • index.php         │
-│   • Hauptlogik       │   • NFC Lesen/NDEF    │   • scan.php          │
-│   • Pairing          │   • Reader-Verwaltung │   • report.php        │
-│   • Broadcast        │   • NDEF-URL-Writer   │   • Login-System      │
-│   • Tagesrhythmus    │                       │   • PHP-API-Proxy     │
-│                      │                       │                       │
-├──────────────────────┴───────────────────────┴───────────────────────┤
-│                                                                      │
-│   🗄️ MariaDB (sicherheit)        📱 Android APK (QR + NFC)          │
-│   • db_manager.py                 • WebView → scan.php               │
-│   • Benutzer, Karten, Logs        • NFC Bridge Functions             │
-│   • Gruppen & Einstellungen       • Auto-Login (?auto=UID)           │
-│                                                                      │
-└──────────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────┐
+│                          🔐 SecureGate System                          │
+│                        main-max.local (HTTPS)                          │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│   🏢 Multi-Room Flask Instanzen                                         │
+│   ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐     │
+│   │  Raum 1     │ │  Raum 2     │ │  Raum 3     │ │  Raum 4     │     │
+│   │  app.py     │ │  app.py     │ │  app.py     │ │  app.py     │     │
+│   │  :5000      │ │  :5100      │ │  :5200      │ │  :5300      │     │
+│   └──────┬──────┘ └──────┬──────┘ └──────┬──────┘ └──────┬──────┘     │
+│          │               │               │               │             │
+│          └───────────────┴───────┬───────┴───────────────┘             │
+│                                  │                                     │
+│   ┌──────────────┐    ┌──────────┴──────────┐    ┌──────────────────┐  │
+│   │ 🔑 webseite  │    │  🗄️ MariaDB         │    │ 🌐 Apache + PHP  │  │
+│   │   -e.py      │    │  (sicherheit)       │    │  (/admin/)       │  │
+│   │  :5001       │    │                     │    │                  │  │
+│   │              │    │  • benutzer         │    │  • index.php     │  │
+│   │  • Reader-UI │    │  • karten           │    │  • scan.php      │  │
+│   │  • NFC/NDEF  │    │  • gruppen          │    │  • report.php    │  │
+│   │  • Pairing   │    │  • einstellungen    │    │  • setup.php     │  │
+│   └──────────────┘    │  • logs             │    │  • app_proxy     │  │
+│                       └─────────────────────┘    └──────────────────┘  │
+│                                                                         │
+│   📱 Android APK (QR + NFC)           🖨️ QR-Karten Drucktool            │
+│   • WebView → scan.php               • Layouts: 1/2/4/6/8/9 pro A4    │
+│   • NFC Bridge Functions             • QR enthält Raw-ATR              │
+│   • Auto-Login (?auto=UID)                                             │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
 ```
 
 <br/>
@@ -210,11 +252,11 @@ Entwickelt für den professionellen Einsatz — betrieben auf einem Raspberry Pi
 
 | Tabelle | Beschreibung |
 |:--|:--|
-| `benutzer` | Benutzerdaten, Berechtigungslevel, Avatare |
-| `karten` | NFC/Smartcard UIDs und Zuordnungen |
-| `gruppen` | Gruppenstruktur mit individueller **Farbzuordnung** |
-| `einstellungen` | Systemkonfiguration, Tagesrhythmus, Akzentfarben |
-| `logs` | Zugangs-Protokolle und Audit-Trail |
+| `benutzer` | Benutzerdaten, Berechtigungslevel (1–10+), Avatare |
+| `karten` | NFC/Smartcard UIDs und Benutzerzuordnungen |
+| `gruppen` | Gruppenstruktur mit individueller Farbzuordnung |
+| `einstellungen` | Systemkonfiguration, Zugangszeiten, Tagesrhythmus |
+| `logs` | Zugangs-Protokolle und Audit-Trail pro Raum |
 
 <br/>
 
@@ -233,42 +275,78 @@ Entwickelt für den professionellen Einsatz — betrieben auf einem Raspberry Pi
 | MariaDB | 10.5+ | Datenbank |
 | Apache | 2.4+ | Webserver für PHP |
 | PHP | 8.0+ | Admin-Dashboard & Reports |
-| NFC-Reader | USB / I²C | Kartenleser |
+| NFC-Reader | USB / I²C | Kartenleser (optional pro Raum) |
 
-### Setup
+### Automatische Installation
 
 ```bash
 # 1. Repository klonen
 git clone https://github.com/Max6025/SecureGate.git
+
+# 2. Setup-Script ausführen
 cd SecureGate
+sudo bash setup.sh
+```
 
-# 2. Dateien nach /opt kopieren
+Anschließend im Browser `https://main-max.local/admin/setup.php` öffnen, um den **Setup-Wizard** zu starten — dieser führt durch Admin-Erstellung und Raum-Konfiguration mit Auto-Pairing.
+
+### Manuelle Installation
+
+```bash
+# 1. Dateien kopieren
 sudo cp -r . /opt/sicherheitssystem/
-
-# 3. Python-Abhängigkeiten installieren
 cd /opt/sicherheitssystem/
+
+# 2. Python-Abhängigkeiten
 pip install -r requirements.txt
 
-# 4. Datenbank einrichten
+# 3. Datenbank einrichten
 sudo mysql -u root < sql/setup.sql
 
-# 5. PHP-Dateien deployen
+# 4. PHP-Dateien deployen
 sudo cp -r web/* /var/www/html/admin/
 sudo chown -R www-data:www-data /var/www/html/admin/
 
-# 6. Services starten
-python3 master-code.py &    # Hauptsystem auf Port 5000
-python3 webseite-e.py &     # Kartenleser auf Port 5001
+# 5. Raum-Services starten
+python3 app.py --port 5000 --room "Eingang" &
+python3 app.py --port 5100 --room "Büro" &
+python3 app.py --port 5200 --room "Lager" --no-reader &
+python3 webseite-e.py &
 ```
 
-### Schnell-Reset (Neuinstallation)
+### Schnell-Reset
 
 ```bash
-# Kompletter System-Reset inkl. Datenbank & Dateien
 sudo bash reset-deploy.sh
 ```
 
-> ⚠️ **Achtung:** `reset-deploy.sh` löscht alle Daten (inkl. Avatare), setzt die Datenbank komplett zurück und deployt alle Dateien neu mit korrekten Berechtigungen.
+> ⚠️ **Achtung:** Löscht alle Daten (inkl. Avatare), setzt die Datenbank komplett zurück und deployt alle Dateien neu mit korrekten Berechtigungen.
+
+<br/>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!--   MULTI-ROOM                                                   -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+
+## 🏢 Multi-Room Konfiguration
+
+Jeder Raum wird als eigenständiger Service betrieben:
+
+| Service | Port | CLI-Befehl |
+|:--|:--|:--|
+| `sicherheit-raum1` | 5000 | `python3 app.py --port 5000 --room "Eingang"` |
+| `sicherheit-raum2` | 5100 | `python3 app.py --port 5100 --room "Büro"` |
+| `sicherheit-raum3` | 5200 | `python3 app.py --port 5200 --room "Lager" --no-reader` |
+| `sicherheit-raum4` | 5300 | `python3 app.py --port 5300 --room "Werkstatt"` |
+| `admin-panel` | 5001 | `python3 webseite-e.py` |
+
+**CLI-Parameter:**
+
+| Parameter | Beschreibung |
+|:--|:--|
+| `--port` | Port für diese Raum-Instanz (5000, 5100, 5200, 5300) |
+| `--room` | Anzeigename des Raums auf dem Monitor |
+| `--no-reader` | Raum ohne angeschlossenen NFC-Reader starten |
 
 <br/>
 
@@ -280,16 +358,21 @@ sudo bash reset-deploy.sh
 
 ```
 /opt/sicherheitssystem/
-├── master-code.py          # ⚙️ Haupt-API & Dashboard (Flask, Port 5000)
+├── app.py                  # ⚙️ Raum-Service (Flask, Multi-Instanz)
 ├── webseite-e.py           # 🔑 Kartenleser-Panel (Flask, Port 5001)
 ├── db_manager.py           # 🗄️ Gemeinsames Datenbankmodul (MariaDB)
 ├── requirements.txt        # 📦 Python-Abhängigkeiten
+├── setup.sh                # 🚀 Automatisches Setup-Script
 ├── reset-deploy.sh         # 🔄 Kompletter System-Reset & Deploy
+├── pairing_5000.json       # 🔗 Pairing-Datei Raum 1
+├── pairing_5100.json       # 🔗 Pairing-Datei Raum 2
+├── ...                     # 🔗 Weitere Pairing-Dateien
 │
 ├── web/
 │   ├── index.php           # 🖥️ Admin-Dashboard (Login + Verwaltung)
 │   ├── scan.php            # 📱 Mobiler QR/NFC Scanner
-│   └── report.php          # 📊 Excel-Report-Generator (PhpSpreadsheet)
+│   ├── report.php          # 📊 Excel-Report-Generator (PhpSpreadsheet)
+│   └── setup.php           # 🧙 Ersteinrichtungs-Wizard
 │
 ├── apk/
 │   ├── patch-nfc.py        # 🔧 NFC-Patch für Android-Build
@@ -298,13 +381,9 @@ sudo bash reset-deploy.sh
 ├── sql/
 │   └── setup.sql           # 🗄️ Datenbank-Schema
 │
-├── certs/
-│   └── ...                 # 🔒 Self-Signed HTTPS Zertifikate
-│
-└── README.md
+└── certs/
+    └── ...                 # 🔒 Self-Signed HTTPS Zertifikate
 ```
-
-> **Hinweis:** Das System nutzt den Hostnamen `main-max.local` — intern werden API-Aufrufe über `127.0.0.1` geroutet, da PHP auf dem Pi `main-max.local` nicht auflösen kann.
 
 <br/>
 
@@ -320,40 +399,36 @@ sudo bash reset-deploy.sh
 
 **Admin-Dashboard**
 
-<!-- Screenshot hier einfügen -->
 <img src="https://via.placeholder.com/500x300/111827/22c55e?text=Admin+Dashboard" width="100%"/>
 
 </td>
 <td width="50%" align="center">
 
-**Kartenleser-Panel**
+**Broadcast & Lockdown**
 
-<!-- Screenshot hier einfügen -->
-<img src="https://via.placeholder.com/500x300/111827/3b82f6?text=Kartenleser+Panel" width="100%"/>
+<img src="https://via.placeholder.com/500x300/111827/3b82f6?text=Broadcast+%26+Lockdown" width="100%"/>
 
 </td>
 </tr>
 <tr>
 <td width="50%" align="center">
 
-**Mobiler Scanner**
+**QR-Karten Drucktool**
 
-<!-- Screenshot hier einfügen -->
-<img src="https://via.placeholder.com/500x300/111827/34A853?text=QR+%2F+NFC+Scanner" width="100%"/>
+<img src="https://via.placeholder.com/500x300/111827/a855f7?text=QR+Karten+Druck" width="100%"/>
 
 </td>
 <td width="50%" align="center">
 
-**Excel-Reports**
+**Setup-Wizard**
 
-<!-- Screenshot hier einfügen -->
-<img src="https://via.placeholder.com/500x300/111827/f59e0b?text=Excel+Reports" width="100%"/>
+<img src="https://via.placeholder.com/500x300/111827/f59e0b?text=Setup+Wizard" width="100%"/>
 
 </td>
 </tr>
 </table>
 
-> 📌 **Hinweis:** Ersetze die Platzhalter durch echte Screenshots deines Systems.
+> 📌 **Tipp:** Ersetze die Platzhalter durch echte Screenshots deines Systems.
 
 <br/>
 
@@ -373,52 +448,60 @@ sudo bash reset-deploy.sh
 <tr>
 <td><img src="https://img.shields.io/badge/GET-22c55e?style=flat-square"/></td>
 <td><code>/api/status</code></td>
-<td>Systemstatus abfragen</td>
-<td>master-code.py</td>
+<td>Systemstatus eines Raums abfragen</td>
+<td>app.py</td>
 </tr>
 <tr>
 <td><img src="https://img.shields.io/badge/POST-3b82f6?style=flat-square"/></td>
 <td><code>/api/validate</code></td>
 <td>Karte / UID validieren</td>
-<td>master-code.py</td>
+<td>app.py</td>
 </tr>
 <tr>
 <td><img src="https://img.shields.io/badge/POST-3b82f6?style=flat-square"/></td>
 <td><code>/api/pair</code></td>
-<td>Kartenleser koppeln</td>
-<td>master-code.py</td>
+<td>Kartenleser an Raum koppeln</td>
+<td>app.py</td>
 </tr>
 <tr>
 <td><img src="https://img.shields.io/badge/POST-3b82f6?style=flat-square"/></td>
 <td><code>/api/broadcast</code></td>
-<td>Nachricht an alle Clients</td>
-<td>master-code.py</td>
+<td>Broadcast an spezifischen Raum senden</td>
+<td>app.py</td>
 </tr>
 <tr>
 <td><img src="https://img.shields.io/badge/GET-22c55e?style=flat-square"/></td>
 <td><code>/api/settings</code></td>
-<td>Systemeinstellungen & Tagesrhythmus</td>
-<td>master-code.py</td>
+<td>Einstellungen & Zugangszeiten</td>
+<td>app.py</td>
 </tr>
 <tr>
 <td><img src="https://img.shields.io/badge/GET-22c55e?style=flat-square"/></td>
-<td><code>/admin/scan.php</code></td>
-<td>Mobiler Scanner (+ Auto-Login)</td>
+<td><code>/admin/?api=app_proxy&port=</code></td>
+<td>PHP-Proxy für Per-Room API-Aufrufe (HTTPS→HTTP)</td>
+<td>Apache/PHP</td>
+</tr>
+<tr>
+<td><img src="https://img.shields.io/badge/GET-22c55e?style=flat-square"/></td>
+<td><code>/admin/scan.php?auto=UID</code></td>
+<td>Mobiler Scanner mit Auto-Login</td>
 <td>Apache/PHP</td>
 </tr>
 <tr>
 <td><img src="https://img.shields.io/badge/GET-22c55e?style=flat-square"/></td>
 <td><code>/admin/report.php</code></td>
-<td>Excel-Report generieren</td>
+<td>Excel-Report generieren (7 Sheets)</td>
 <td>Apache/PHP</td>
 </tr>
 <tr>
 <td><img src="https://img.shields.io/badge/GET-22c55e?style=flat-square"/></td>
-<td><code>/admin/?api=app_proxy</code></td>
-<td>PHP-Proxy für API-Aufrufe (HTTPS→HTTP)</td>
+<td><code>/admin/setup.php</code></td>
+<td>Ersteinrichtungs-Wizard</td>
 <td>Apache/PHP</td>
 </tr>
 </table>
+
+> **Hinweis:** Der `app_proxy` akzeptiert einen `&port=`-Parameter, um gezielt den richtigen Raum-Service anzusprechen.
 
 <br/>
 
@@ -440,9 +523,19 @@ sudo bash reset-deploy.sh
 <td>Mehrstufiges Berechtigungssystem (Level 1–10+)</td>
 </tr>
 <tr>
+<td>🏢</td>
+<td><strong>Per-Room Lockdown</strong></td>
+<td>Einzelne Räume können unabhängig gesperrt werden</td>
+</tr>
+<tr>
+<td>⏰</td>
+<td><strong>Zugangszeiten</strong></td>
+<td>Zeitbasierte Zugangsbeschränkung mit Mittagspause & Override</td>
+</tr>
+<tr>
 <td>🗄️</td>
 <td><strong>Lokal</strong></td>
-<td>Alle Daten bleiben auf dem eigenen Raspberry Pi — kein Cloud-Zwang</td>
+<td>Alle Daten auf dem eigenen Raspberry Pi — kein Cloud-Zwang</td>
 </tr>
 <tr>
 <td>📋</td>
@@ -452,14 +545,14 @@ sudo bash reset-deploy.sh
 <tr>
 <td>🔄</td>
 <td><strong>API-Proxy</strong></td>
-<td>Mixed-Content-Schutz durch PHP-Proxy für HTTPS→HTTP Aufrufe</td>
+<td>Mixed-Content-Schutz durch PHP-Proxy (HTTPS→HTTP)</td>
 </tr>
 </table>
 
 <br/>
 
 <!-- ═══════════════════════════════════════════════════════════════ -->
-<!--   BEKANNTE EINSCHRÄNKUNGEN                                     -->
+<!--   EINSCHRÄNKUNGEN                                              -->
 <!-- ═══════════════════════════════════════════════════════════════ -->
 
 ## ⚠️ Bekannte Einschränkungen
@@ -467,7 +560,7 @@ sudo bash reset-deploy.sh
 | Einschränkung | Grund |
 |:--|:--|
 | APK-Build nicht auf dem Pi möglich | ARM64 vs. x86 AAPT2 — Build auf separatem PC erforderlich |
-| Web NFC API liest nur NDEF | Keine Raw-Card-UIDs über den Browser möglich |
+| Web NFC API liest nur NDEF | Keine Raw-Card-UIDs über den Browser — nur über physischen Reader |
 | Torch/Vibration im WebView deaktiviert | Android WebView unterstützt diese APIs nicht |
 | PHP kann `main-max.local` nicht auflösen | Interne API-Aufrufe nutzen `127.0.0.1` statt Hostname |
 
@@ -486,11 +579,14 @@ sudo bash reset-deploy.sh
 - [x] Broadcast & Pairing System
 - [x] NDEF-Schreibfunktion für NFC-Tags
 - [x] Gruppen-Verwaltung mit Farbzuordnung
-- [x] Tagesrhythmus mit Akzentfarben
-- [x] PHP-API-Proxy (Mixed-Content Fix)
+- [x] **Multi-Room-Architektur** (bis zu 4 Räume)
+- [x] **Setup-Wizard** (setup.sh + setup.php)
+- [x] **QR-Karten Drucktool** (Layouts 1–9 pro A4)
+- [x] **Broadcast-Tab** mit Live-Countdown
+- [x] **Per-Room Lockdown**
+- [x] **Zugangszeiten** mit Mittagspause & Override
 - [ ] iOS-Support (PWA)
 - [ ] Biometrische Authentifizierung
-- [ ] Multi-Standort Verwaltung
 - [ ] E-Mail-Benachrichtigungen
 
 <br/>
@@ -515,7 +611,7 @@ Dieses Projekt steht unter der [Apache License 2.0](LICENSE).
 
 <br/>
 
-<strong>SecureGate</strong> — Professionelle Zutrittskontrolle. Selbst gehostet. Open Source.
+<strong>SecureGate</strong> — Professionelle Multi-Room Zutrittskontrolle. Selbst gehostet. Open Source.
 
 <br/>
 
