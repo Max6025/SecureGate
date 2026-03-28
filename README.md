@@ -9,7 +9,7 @@
 <br/>
 
 <!-- Status Badges -->
-![Version](https://img.shields.io/badge/Version-1.0.0-22c55e?style=for-the-badge)
+![Version](https://img.shields.io/badge/Version-2.0.0-22c55e?style=for-the-badge)
 ![Platform](https://img.shields.io/badge/Platform-Raspberry%20Pi-A22846?style=for-the-badge&logo=raspberry-pi&logoColor=white)
 ![License](https://img.shields.io/badge/License-Apache%202.0-3b82f6?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Production%20Ready-22c55e?style=for-the-badge)
@@ -54,10 +54,10 @@ Entwickelt für den professionellen Einsatz — betrieben auf einem Raspberry Pi
 </p>
 
 - Unterstützt **NFC-Tags & Smartcards** zur Authentifizierung
-- **NDEF-Schreibfunktion** — Tags werden automatisch mit einer Zugangs-URL beschrieben
+- **NDEF-Schreibfunktion** — Tags werden automatisch mit einer Zugangs-URL beschrieben (`https://main-max.local/admin/scan.php?auto=UID`)
 - Kartenleser-Verwaltung über ein eigenes Admin-Panel (`webseite-e.py`)
 - Echtzeit-Validierung über REST-API
-- Pairingprotokoll zwischen Kartenleser und Hauptsystem mit visuellem Feedback
+- **Pairingprotokoll** zwischen Kartenleser und Hauptsystem mit pulsierendem Pairing-Code
 
 </td>
 <td width="50%" valign="top">
@@ -69,10 +69,11 @@ Entwickelt für den professionellen Einsatz — betrieben auf einem Raspberry Pi
 </p>
 
 - **Rollenbasiertes Login-System** mit Berechtigungsstufen (Level 1–10+)
-- Administratoren (Level 10+) erhalten Zugriff auf das vollständige Dashboard
-- Mitarbeiter sehen eine personalisierte QR-Code-Seite mit ihrem Namen
-- Benutzer anlegen, bearbeiten und Rechte verwalten
-- **Broadcast-System** für systemweite Benachrichtigungen
+- Administratoren (Level 10+) → vollständiges Dashboard
+- Mitarbeiter → personalisierte QR-Code-Seite mit ihrem Namen
+- **Gruppen-Verwaltung** mit individueller Farbzuordnung
+- **Broadcast-System** für systemweite Benachrichtigungen (via PHP-Proxy)
+- **Tagesrhythmus** — automatisch wechselnde Akzentfarben je nach Tageszeit
 - Professionelles Dark-Theme-Interface
 
 </td>
@@ -87,11 +88,12 @@ Entwickelt für den professionellen Einsatz — betrieben auf einem Raspberry Pi
 </p>
 
 - Native **Android-App** (WebView-basiert) für mobiles Scannen
-- Unterstützt **QR-Code & NFC-Scan** über die Kamera bzw. NFC-Chip
+- Unterstützt **QR-Code & NFC-Scan** über Kamera bzw. NFC-Chip
 - Auto-Login via URL-Parameter (`?auto=UID`)
 - NFC-Integration über `nfcScanned()` und `nfcReady()` Bridge-Funktionen
-- Ergebnis-Anzeige als elegante Glassmorphism-Toast-Benachrichtigungen
+- Ergebnis-Anzeige als **Glassmorphism-Toast-Benachrichtigungen**
 - Dark/Light-Mode Umschaltung
+- NFC-Patch über `patch-nfc.py` (dynamische `MainActivity.java`-Erkennung)
 
 </td>
 <td width="50%" valign="top">
@@ -133,13 +135,15 @@ Entwickelt für den professionellen Einsatz — betrieben auf einem Raspberry Pi
 │   • REST API         │   • Kartenleser-UI    │   • index.php         │
 │   • Hauptlogik       │   • NFC Lesen/NDEF    │   • scan.php          │
 │   • Pairing          │   • Reader-Verwaltung │   • report.php        │
-│   • Broadcast        │                       │   • Login-System      │
+│   • Broadcast        │   • NDEF-URL-Writer   │   • Login-System      │
+│   • Tagesrhythmus    │                       │   • PHP-API-Proxy     │
 │                      │                       │                       │
 ├──────────────────────┴───────────────────────┴───────────────────────┤
 │                                                                      │
 │   🗄️ MariaDB (sicherheit)        📱 Android APK (QR + NFC)          │
 │   • db_manager.py                 • WebView → scan.php               │
 │   • Benutzer, Karten, Logs        • NFC Bridge Functions             │
+│   • Gruppen & Einstellungen       • Auto-Login (?auto=UID)           │
 │                                                                      │
 └──────────────────────────────────────────────────────────────────────┘
 ```
@@ -199,6 +203,22 @@ Entwickelt für den professionellen Einsatz — betrieben auf einem Raspberry Pi
 <br/>
 
 <!-- ═══════════════════════════════════════════════════════════════ -->
+<!--   DATENBANK                                                    -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+
+## 🗄️ Datenbank-Schema
+
+| Tabelle | Beschreibung |
+|:--|:--|
+| `benutzer` | Benutzerdaten, Berechtigungslevel, Avatare |
+| `karten` | NFC/Smartcard UIDs und Zuordnungen |
+| `gruppen` | Gruppenstruktur mit individueller **Farbzuordnung** |
+| `einstellungen` | Systemkonfiguration, Tagesrhythmus, Akzentfarben |
+| `logs` | Zugangs-Protokolle und Audit-Trail |
+
+<br/>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
 <!--   INSTALLATION                                                 -->
 <!-- ═══════════════════════════════════════════════════════════════ -->
 
@@ -212,7 +232,7 @@ Entwickelt für den professionellen Einsatz — betrieben auf einem Raspberry Pi
 | Python | 3.9+ | Backend-Services |
 | MariaDB | 10.5+ | Datenbank |
 | Apache | 2.4+ | Webserver für PHP |
-| PHP | 8.0+ | Admin-Dashboard |
+| PHP | 8.0+ | Admin-Dashboard & Reports |
 | NFC-Reader | USB / I²C | Kartenleser |
 
 ### Setup
@@ -222,17 +242,21 @@ Entwickelt für den professionellen Einsatz — betrieben auf einem Raspberry Pi
 git clone https://github.com/Max6025/SecureGate.git
 cd SecureGate
 
-# 2. Python-Abhängigkeiten installieren
+# 2. Dateien nach /opt kopieren
+sudo cp -r . /opt/sicherheitssystem/
+
+# 3. Python-Abhängigkeiten installieren
+cd /opt/sicherheitssystem/
 pip install -r requirements.txt
 
-# 3. Datenbank einrichten
+# 4. Datenbank einrichten
 sudo mysql -u root < sql/setup.sql
 
-# 4. PHP-Dateien deployen
+# 5. PHP-Dateien deployen
 sudo cp -r web/* /var/www/html/admin/
 sudo chown -R www-data:www-data /var/www/html/admin/
 
-# 5. Services starten
+# 6. Services starten
 python3 master-code.py &    # Hauptsystem auf Port 5000
 python3 webseite-e.py &     # Kartenleser auf Port 5001
 ```
@@ -244,7 +268,7 @@ python3 webseite-e.py &     # Kartenleser auf Port 5001
 sudo bash reset-deploy.sh
 ```
 
-> ⚠️ **Achtung:** `reset-deploy.sh` löscht alle Daten, setzt die Datenbank zurück und deployt alle Dateien neu.
+> ⚠️ **Achtung:** `reset-deploy.sh` löscht alle Daten (inkl. Avatare), setzt die Datenbank komplett zurück und deployt alle Dateien neu mit korrekten Berechtigungen.
 
 <br/>
 
@@ -255,7 +279,7 @@ sudo bash reset-deploy.sh
 ## 📁 Projektstruktur
 
 ```
-SecureGate/
+/opt/sicherheitssystem/
 ├── master-code.py          # ⚙️ Haupt-API & Dashboard (Flask, Port 5000)
 ├── webseite-e.py           # 🔑 Kartenleser-Panel (Flask, Port 5001)
 ├── db_manager.py           # 🗄️ Gemeinsames Datenbankmodul (MariaDB)
@@ -265,7 +289,7 @@ SecureGate/
 ├── web/
 │   ├── index.php           # 🖥️ Admin-Dashboard (Login + Verwaltung)
 │   ├── scan.php            # 📱 Mobiler QR/NFC Scanner
-│   └── report.php          # 📊 Excel-Report-Generator
+│   └── report.php          # 📊 Excel-Report-Generator (PhpSpreadsheet)
 │
 ├── apk/
 │   ├── patch-nfc.py        # 🔧 NFC-Patch für Android-Build
@@ -279,6 +303,8 @@ SecureGate/
 │
 └── README.md
 ```
+
+> **Hinweis:** Das System nutzt den Hostnamen `main-max.local` — intern werden API-Aufrufe über `127.0.0.1` geroutet, da PHP auf dem Pi `main-max.local` nicht auflösen kann.
 
 <br/>
 
@@ -370,14 +396,26 @@ SecureGate/
 </tr>
 <tr>
 <td><img src="https://img.shields.io/badge/GET-22c55e?style=flat-square"/></td>
+<td><code>/api/settings</code></td>
+<td>Systemeinstellungen & Tagesrhythmus</td>
+<td>master-code.py</td>
+</tr>
+<tr>
+<td><img src="https://img.shields.io/badge/GET-22c55e?style=flat-square"/></td>
 <td><code>/admin/scan.php</code></td>
-<td>Mobiler Scanner</td>
+<td>Mobiler Scanner (+ Auto-Login)</td>
 <td>Apache/PHP</td>
 </tr>
 <tr>
 <td><img src="https://img.shields.io/badge/GET-22c55e?style=flat-square"/></td>
 <td><code>/admin/report.php</code></td>
 <td>Excel-Report generieren</td>
+<td>Apache/PHP</td>
+</tr>
+<tr>
+<td><img src="https://img.shields.io/badge/GET-22c55e?style=flat-square"/></td>
+<td><code>/admin/?api=app_proxy</code></td>
+<td>PHP-Proxy für API-Aufrufe (HTTPS→HTTP)</td>
 <td>Apache/PHP</td>
 </tr>
 </table>
@@ -411,7 +449,27 @@ SecureGate/
 <td><strong>Audit-Logs</strong></td>
 <td>Jeder Zugang wird protokolliert und ist über Reports einsehbar</td>
 </tr>
+<tr>
+<td>🔄</td>
+<td><strong>API-Proxy</strong></td>
+<td>Mixed-Content-Schutz durch PHP-Proxy für HTTPS→HTTP Aufrufe</td>
+</tr>
 </table>
+
+<br/>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!--   BEKANNTE EINSCHRÄNKUNGEN                                     -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+
+## ⚠️ Bekannte Einschränkungen
+
+| Einschränkung | Grund |
+|:--|:--|
+| APK-Build nicht auf dem Pi möglich | ARM64 vs. x86 AAPT2 — Build auf separatem PC erforderlich |
+| Web NFC API liest nur NDEF | Keine Raw-Card-UIDs über den Browser möglich |
+| Torch/Vibration im WebView deaktiviert | Android WebView unterstützt diese APIs nicht |
+| PHP kann `main-max.local` nicht auflösen | Interne API-Aufrufe nutzen `127.0.0.1` statt Hostname |
 
 <br/>
 
@@ -427,6 +485,9 @@ SecureGate/
 - [x] Excel-Report Generator (7 Sheets)
 - [x] Broadcast & Pairing System
 - [x] NDEF-Schreibfunktion für NFC-Tags
+- [x] Gruppen-Verwaltung mit Farbzuordnung
+- [x] Tagesrhythmus mit Akzentfarben
+- [x] PHP-API-Proxy (Mixed-Content Fix)
 - [ ] iOS-Support (PWA)
 - [ ] Biometrische Authentifizierung
 - [ ] Multi-Standort Verwaltung
@@ -435,7 +496,7 @@ SecureGate/
 <br/>
 
 <!-- ═══════════════════════════════════════════════════════════════ -->
-<!--   LIZENZ & KONTAKT                                             -->
+<!--   LIZENZ                                                       -->
 <!-- ═══════════════════════════════════════════════════════════════ -->
 
 ## 📄 Lizenz
