@@ -1,0 +1,179 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0d1117"/>
+      <stop offset="100%" stop-color="#161b22"/>
+    </linearGradient>
+    <linearGradient id="card" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1c2333"/>
+      <stop offset="100%" stop-color="#161b22"/>
+    </linearGradient>
+    <linearGradient id="green" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#22c55e"/>
+      <stop offset="100%" stop-color="#16a34a"/>
+    </linearGradient>
+    <linearGradient id="blue" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#2563eb"/>
+    </linearGradient>
+    <linearGradient id="amber" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+    <linearGradient id="red" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#ef4444"/>
+      <stop offset="100%" stop-color="#dc2626"/>
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="500" fill="url(#bg)"/>
+
+  <!-- Sidebar -->
+  <rect x="0" y="0" width="200" height="500" fill="#0d1117" stroke="#21262d" stroke-width="1"/>
+
+  <!-- Logo area -->
+  <text x="30" y="40" font-family="Segoe UI, sans-serif" font-size="18" font-weight="700" fill="#22c55e">🔐 SecureGate</text>
+  <line x1="15" y1="55" x2="185" y2="55" stroke="#21262d" stroke-width="1"/>
+
+  <!-- Nav items -->
+  <rect x="10" y="65" width="180" height="36" rx="8" fill="#22c55e" fill-opacity="0.15"/>
+  <text x="45" y="88" font-family="Segoe UI, sans-serif" font-size="13" fill="#22c55e">📊 Dashboard</text>
+
+  <text x="45" y="124" font-family="Segoe UI, sans-serif" font-size="13" fill="#8b949e">👥 Benutzer</text>
+  <text x="45" y="157" font-family="Segoe UI, sans-serif" font-size="13" fill="#8b949e">🏢 Räume</text>
+  <text x="45" y="190" font-family="Segoe UI, sans-serif" font-size="13" fill="#8b949e">💳 Karten</text>
+  <text x="45" y="223" font-family="Segoe UI, sans-serif" font-size="13" fill="#8b949e">👥 Gruppen</text>
+  <text x="45" y="256" font-family="Segoe UI, sans-serif" font-size="13" fill="#8b949e">📢 Broadcast</text>
+  <text x="45" y="289" font-family="Segoe UI, sans-serif" font-size="13" fill="#8b949e">🖨️ QR-Druck</text>
+  <text x="45" y="322" font-family="Segoe UI, sans-serif" font-size="13" fill="#8b949e">📊 Reports</text>
+  <text x="45" y="355" font-family="Segoe UI, sans-serif" font-size="13" fill="#8b949e">⚙️ Einstellungen</text>
+
+  <!-- User info bottom -->
+  <line x1="15" y1="450" x2="185" y2="450" stroke="#21262d" stroke-width="1"/>
+  <circle cx="35" cy="475" r="14" fill="#3b82f6"/>
+  <text x="32" y="480" font-family="Segoe UI, sans-serif" font-size="12" fill="white" text-anchor="middle">M</text>
+  <text x="58" y="472" font-family="Segoe UI, sans-serif" font-size="12" fill="#e6edf3">Max</text>
+  <text x="58" y="487" font-family="Segoe UI, sans-serif" font-size="10" fill="#8b949e">Admin · Level 10</text>
+
+  <!-- Main content area -->
+  <!-- Header -->
+  <text x="225" y="40" font-family="Segoe UI, sans-serif" font-size="20" font-weight="700" fill="#e6edf3">Dashboard</text>
+  <text x="225" y="58" font-family="Segoe UI, sans-serif" font-size="12" fill="#8b949e">Systemübersicht · Freitag, 28. März 2026</text>
+
+  <!-- Stat Cards Row -->
+  <!-- Card 1: Benutzer -->
+  <rect x="220" y="75" width="135" height="80" rx="10" fill="url(#card)" stroke="#21262d" stroke-width="1" filter="url(#shadow)"/>
+  <text x="235" y="100" font-family="Segoe UI, sans-serif" font-size="11" fill="#8b949e">Benutzer</text>
+  <text x="235" y="130" font-family="Segoe UI, sans-serif" font-size="28" font-weight="700" fill="#22c55e">47</text>
+  <text x="235" y="147" font-family="Segoe UI, sans-serif" font-size="10" fill="#22c55e">+3 diese Woche</text>
+
+  <!-- Card 2: Räume -->
+  <rect x="365" y="75" width="135" height="80" rx="10" fill="url(#card)" stroke="#21262d" stroke-width="1" filter="url(#shadow)"/>
+  <text x="380" y="100" font-family="Segoe UI, sans-serif" font-size="11" fill="#8b949e">Aktive Räume</text>
+  <text x="380" y="130" font-family="Segoe UI, sans-serif" font-size="28" font-weight="700" fill="#3b82f6">6</text>
+  <text x="380" y="147" font-family="Segoe UI, sans-serif" font-size="10" fill="#3b82f6">Alle online</text>
+
+  <!-- Card 3: Zugriffe heute -->
+  <rect x="510" y="75" width="135" height="80" rx="10" fill="url(#card)" stroke="#21262d" stroke-width="1" filter="url(#shadow)"/>
+  <text x="525" y="100" font-family="Segoe UI, sans-serif" font-size="11" fill="#8b949e">Zugriffe heute</text>
+  <text x="525" y="130" font-family="Segoe UI, sans-serif" font-size="28" font-weight="700" fill="#f59e0b">183</text>
+  <text x="525" y="147" font-family="Segoe UI, sans-serif" font-size="10" fill="#f59e0b">↑ 12% vs. gestern</text>
+
+  <!-- Card 4: Abgelehnt -->
+  <rect x="655" y="75" width="125" height="80" rx="10" fill="url(#card)" stroke="#21262d" stroke-width="1" filter="url(#shadow)"/>
+  <text x="670" y="100" font-family="Segoe UI, sans-serif" font-size="11" fill="#8b949e">Abgelehnt</text>
+  <text x="670" y="130" font-family="Segoe UI, sans-serif" font-size="28" font-weight="700" fill="#ef4444">5</text>
+  <text x="670" y="147" font-family="Segoe UI, sans-serif" font-size="10" fill="#ef4444">2 unbekannte Karten</text>
+
+  <!-- Room Status Table -->
+  <rect x="220" y="170" width="365" height="310" rx="10" fill="url(#card)" stroke="#21262d" stroke-width="1" filter="url(#shadow)"/>
+  <text x="240" y="198" font-family="Segoe UI, sans-serif" font-size="14" font-weight="600" fill="#e6edf3">Raumstatus</text>
+
+  <!-- Table header -->
+  <text x="240" y="225" font-family="Segoe UI, sans-serif" font-size="11" fill="#8b949e">Raum</text>
+  <text x="370" y="225" font-family="Segoe UI, sans-serif" font-size="11" fill="#8b949e">Port</text>
+  <text x="430" y="225" font-family="Segoe UI, sans-serif" font-size="11" fill="#8b949e">Status</text>
+  <text x="510" y="225" font-family="Segoe UI, sans-serif" font-size="11" fill="#8b949e">Zugriffe</text>
+  <line x1="235" y1="232" x2="575" y2="232" stroke="#21262d" stroke-width="1"/>
+
+  <!-- Room rows -->
+  <circle cx="248" cy="252" r="5" fill="#22c55e"/>
+  <text x="260" y="256" font-family="Segoe UI, sans-serif" font-size="12" fill="#e6edf3">Eingang</text>
+  <text x="370" y="256" font-family="Segoe UI, sans-serif" font-size="12" fill="#8b949e">5000</text>
+  <rect x="425" y="243" width="55" height="18" rx="9" fill="#22c55e" fill-opacity="0.15"/>
+  <text x="435" y="256" font-family="Segoe UI, sans-serif" font-size="10" fill="#22c55e">Online</text>
+  <text x="520" y="256" font-family="Segoe UI, sans-serif" font-size="12" fill="#e6edf3">52</text>
+
+  <circle cx="248" cy="282" r="5" fill="#22c55e"/>
+  <text x="260" y="286" font-family="Segoe UI, sans-serif" font-size="12" fill="#e6edf3">Büro Erdgeschoss</text>
+  <text x="370" y="286" font-family="Segoe UI, sans-serif" font-size="12" fill="#8b949e">5100</text>
+  <rect x="425" y="273" width="55" height="18" rx="9" fill="#22c55e" fill-opacity="0.15"/>
+  <text x="435" y="286" font-family="Segoe UI, sans-serif" font-size="10" fill="#22c55e">Online</text>
+  <text x="520" y="286" font-family="Segoe UI, sans-serif" font-size="12" fill="#e6edf3">38</text>
+
+  <circle cx="248" cy="312" r="5" fill="#22c55e"/>
+  <text x="260" y="316" font-family="Segoe UI, sans-serif" font-size="12" fill="#e6edf3">Serverraum</text>
+  <text x="370" y="316" font-family="Segoe UI, sans-serif" font-size="12" fill="#8b949e">5200</text>
+  <rect x="425" y="303" width="55" height="18" rx="9" fill="#22c55e" fill-opacity="0.15"/>
+  <text x="435" y="316" font-family="Segoe UI, sans-serif" font-size="10" fill="#22c55e">Online</text>
+  <text x="520" y="316" font-family="Segoe UI, sans-serif" font-size="12" fill="#e6edf3">12</text>
+
+  <circle cx="248" cy="342" r="5" fill="#f59e0b"/>
+  <text x="260" y="346" font-family="Segoe UI, sans-serif" font-size="12" fill="#e6edf3">Lager</text>
+  <text x="370" y="346" font-family="Segoe UI, sans-serif" font-size="12" fill="#8b949e">5300</text>
+  <rect x="425" y="333" width="70" height="18" rx="9" fill="#f59e0b" fill-opacity="0.15"/>
+  <text x="433" y="346" font-family="Segoe UI, sans-serif" font-size="10" fill="#f59e0b">Lockdown</text>
+  <text x="520" y="346" font-family="Segoe UI, sans-serif" font-size="12" fill="#e6edf3">24</text>
+
+  <circle cx="248" cy="372" r="5" fill="#22c55e"/>
+  <text x="260" y="376" font-family="Segoe UI, sans-serif" font-size="12" fill="#e6edf3">Werkstatt</text>
+  <text x="370" y="376" font-family="Segoe UI, sans-serif" font-size="12" fill="#8b949e">5400</text>
+  <rect x="425" y="363" width="55" height="18" rx="9" fill="#22c55e" fill-opacity="0.15"/>
+  <text x="435" y="376" font-family="Segoe UI, sans-serif" font-size="10" fill="#22c55e">Online</text>
+  <text x="520" y="376" font-family="Segoe UI, sans-serif" font-size="12" fill="#e6edf3">31</text>
+
+  <circle cx="248" cy="402" r="5" fill="#22c55e"/>
+  <text x="260" y="406" font-family="Segoe UI, sans-serif" font-size="12" fill="#e6edf3">Konferenzraum</text>
+  <text x="370" y="406" font-family="Segoe UI, sans-serif" font-size="12" fill="#8b949e">5500</text>
+  <rect x="425" y="393" width="55" height="18" rx="9" fill="#22c55e" fill-opacity="0.15"/>
+  <text x="435" y="406" font-family="Segoe UI, sans-serif" font-size="10" fill="#22c55e">Online</text>
+  <text x="520" y="406" font-family="Segoe UI, sans-serif" font-size="12" fill="#e6edf3">26</text>
+
+  <!-- Recent Activity -->
+  <rect x="595" y="170" width="185" height="310" rx="10" fill="url(#card)" stroke="#21262d" stroke-width="1" filter="url(#shadow)"/>
+  <text x="615" y="198" font-family="Segoe UI, sans-serif" font-size="14" font-weight="600" fill="#e6edf3">Letzte Zugriffe</text>
+
+  <circle cx="618" cy="225" r="4" fill="#22c55e"/>
+  <text x="630" y="222" font-family="Segoe UI, sans-serif" font-size="10" fill="#e6edf3">Müller, T.</text>
+  <text x="630" y="234" font-family="Segoe UI, sans-serif" font-size="9" fill="#8b949e">Eingang · 14:23</text>
+
+  <circle cx="618" cy="258" r="4" fill="#22c55e"/>
+  <text x="630" y="255" font-family="Segoe UI, sans-serif" font-size="10" fill="#e6edf3">Schmidt, K.</text>
+  <text x="630" y="267" font-family="Segoe UI, sans-serif" font-size="9" fill="#8b949e">Büro EG · 14:21</text>
+
+  <circle cx="618" cy="291" r="4" fill="#ef4444"/>
+  <text x="630" y="288" font-family="Segoe UI, sans-serif" font-size="10" fill="#e6edf3">Unbekannt</text>
+  <text x="630" y="300" font-family="Segoe UI, sans-serif" font-size="9" fill="#ef4444">Serverraum · 14:18</text>
+
+  <circle cx="618" cy="324" r="4" fill="#22c55e"/>
+  <text x="630" y="321" font-family="Segoe UI, sans-serif" font-size="10" fill="#e6edf3">Weber, A.</text>
+  <text x="630" y="333" font-family="Segoe UI, sans-serif" font-size="9" fill="#8b949e">Werkstatt · 14:15</text>
+
+  <circle cx="618" cy="357" r="4" fill="#22c55e"/>
+  <text x="630" y="354" font-family="Segoe UI, sans-serif" font-size="10" fill="#e6edf3">Fischer, L.</text>
+  <text x="630" y="366" font-family="Segoe UI, sans-serif" font-size="9" fill="#8b949e">Eingang · 14:12</text>
+
+  <circle cx="618" cy="390" r="4" fill="#22c55e"/>
+  <text x="630" y="387" font-family="Segoe UI, sans-serif" font-size="10" fill="#e6edf3">Bauer, M.</text>
+  <text x="630" y="399" font-family="Segoe UI, sans-serif" font-size="9" fill="#8b949e">Konferenz · 14:09</text>
+
+  <circle cx="618" cy="423" r="4" fill="#f59e0b"/>
+  <text x="630" y="420" font-family="Segoe UI, sans-serif" font-size="10" fill="#e6edf3">Hofmann, P.</text>
+  <text x="630" y="432" font-family="Segoe UI, sans-serif" font-size="9" fill="#f59e0b">Lager · Lockdown</text>
+
+  <text x="620" y="465" font-family="Segoe UI, sans-serif" font-size="10" fill="#3b82f6" text-decoration="underline">Alle anzeigen →</text>
+</svg>

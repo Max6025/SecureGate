@@ -72,6 +72,7 @@ Entwickelt für den professionellen Einsatz — betrieben auf einem Raspberry Pi
 - Unterstützt **NFC-Tags & Smartcards** zur Authentifizierung
 - **NDEF-Schreibfunktion** — Tags erhalten automatisch eine Zugangs-URL
 - Kartenleser-Verwaltung über eigenes Admin-Panel (`webseite-e.py`)
+- **Emulator-Modus** — Reader-Simulation ohne physische Hardware
 - Echtzeit-Validierung über REST-API
 - **Pairingprotokoll** mit pulsierendem Pairing-Code auf dem Monitor
 
@@ -87,13 +88,15 @@ Entwickelt für den professionellen Einsatz — betrieben auf einem Raspberry Pi
 </p>
 
 - **Rollenbasiertes Login-System** — Level 1–10+
-- Administratoren (Level 10+) → vollständiges Dashboard
-- Mitarbeiter → personalisierte QR-Code-Seite
+- Administratoren (Level 10+) → vollständiges Dashboard mit Tabs: Home, Logs, Zeiten, Statistik, Events, Gruppen, Admin, Emulator, Broadcast, Mobil, Einstellungen
+- **Live-Dashboard** mit Aktivität pro Stunde, Check-Ins, Check-Outs, Alarme
 - **Gruppen-Verwaltung** mit individueller Farbzuordnung
+- **Gäste-System** — temporäre Zugänge mit automatischer Löschung
 - **Broadcast-Tab** mit Per-Room-Steuerung und Live-Countdown (HH:MM:SS)
 - **Lockdown-Modus** — Räume einzeln sperren
-- **Zugangszeiten** mit Mittagspause und 5-Minuten-Override-Button
+- **Zugangszeiten** mit Mittagspause und 5-Minuten-Freischaltung
 - **QR-Karten Drucktool** — Benutzer wählen, Layout 1/2/4/6/8/9 pro A4-Seite
+- **XLSX- & CSV-Export** für Reports
 
 </td>
 <td width="50%" valign="top">
@@ -120,14 +123,49 @@ Entwickelt für den professionellen Einsatz — betrieben auf einem Raspberry Pi
 ### 📊 Excel-Reports & Statistiken
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Reports-7%20Sheet%20Excel-ef4444?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/Reports-XLSX%20%26%20CSV-ef4444?style=for-the-badge"/>
 </p>
 
 - Automatische Generierung von **umfassenden Excel-Reports**
 - **7 Tabellenblätter** mit Auswertungen und Diagrammen
 - Erstellt über `report.php` mit **PhpSpreadsheet**
+- **Wochenreport** — automatischer Versand konfigurierbar (Report-Tag wählbar)
 - Zugangsstatistiken, Benutzeraktivitäten & Zeitauswertungen
 - Exportierbar für Compliance- und Sicherheitsaudits
+
+</td>
+<td width="50%" valign="top">
+
+### 💡 WLED Matrix & Hardware
+
+<p align="center">
+  <img src="https://img.shields.io/badge/WLED-LED%20Matrix-a855f7?style=for-the-badge"/>
+</p>
+
+- **WLED Matrix Integration** — visuelle Statusanzeige per LED-Panel
+- Konfigurierbare **Check-In Farbe** (z.B. Grün) und **Check-Out Farbe** (z.B. Blau)
+- WLED IP-Adresse pro Raum konfigurierbar
+- **Alarm-Sound** bei unbekannten Karten
+- **Auto-Broadcast bei Fehler** — automatische Benachrichtigung
+- **Tagesrhythmus** — Akzentfarben passen sich automatisch der Tageszeit an
+
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+
+### 🛡️ Sicherheitsfeatures
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Security-Anti--Tailgating-22c55e?style=for-the-badge"/>
+</p>
+
+- **Anti-Tailgating** — Cooldown und Gap-Erkennung (konfigurierbar in Sekunden)
+- **Brute-Force Schutz** — Limit + Zeitfenster für fehlgeschlagene Versuche
+- **Karte-Stuck Timeout** — automatische Erkennung festsitzender Karten
+- **Scan-Cooldown** getrennt für Check-In und Check-Out
+- **Zugangszeiten** mit Öffnungs-/Schließzeiten und Mittagspause
+- **Gast Auto-Löschung** nach konfigurierbarer Anzahl Tagen
 
 </td>
 <td width="50%" valign="top">
@@ -135,7 +173,7 @@ Entwickelt für den professionellen Einsatz — betrieben auf einem Raspberry Pi
 ### ⚡ Setup-Wizard & Deployment
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Setup-One--Click%20Install-a855f7?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/Setup-One--Click%20Install-f59e0b?style=for-the-badge"/>
 </p>
 
 - **`setup.sh`** — Automatische Systeminstallation
@@ -377,6 +415,12 @@ Jeder Raum wird als eigenständiger Service betrieben. Die Anzahl der Räume ist
 │   ├── patch-nfc.py        # 🔧 NFC-Patch für Android-Build
 │   └── ...                 # 📱 Android APK Quellen
 │
+├── screenshots/
+│   ├── raum-monitor.png    # 🖼️ Raum-Monitor Ansicht
+│   ├── admin-dashboard.png # 🖼️ Admin-Dashboard
+│   ├── einstellungen.png   # 🖼️ Einstellungen-Panel
+│   └── zugang-geschlossen.png # 🖼️ Zugang geschlossen
+│
 ├── sql/
 │   └── setup.sql           # 🗄️ Datenbank-Schema
 │
@@ -396,38 +440,36 @@ Jeder Raum wird als eigenständiger Service betrieben. Die Anzahl der Räume ist
 <tr>
 <td width="50%" align="center">
 
-**Admin-Dashboard**
+**Raum-Monitor**
 
-<img src="https://via.placeholder.com/500x300/111827/22c55e?text=Admin+Dashboard" width="100%"/>
+<img src="screenshots/raum-monitor.png" width="100%"/>
 
 </td>
 <td width="50%" align="center">
 
-**Broadcast & Lockdown**
+**Admin-Dashboard**
 
-<img src="https://via.placeholder.com/500x300/111827/3b82f6?text=Broadcast+%26+Lockdown" width="100%"/>
+<img src="screenshots/admin-dashboard.png" width="100%"/>
 
 </td>
 </tr>
 <tr>
 <td width="50%" align="center">
 
-**QR-Karten Drucktool**
+**Einstellungen**
 
-<img src="https://via.placeholder.com/500x300/111827/a855f7?text=QR+Karten+Druck" width="100%"/>
+<img src="screenshots/einstellungen.png" width="100%"/>
 
 </td>
 <td width="50%" align="center">
 
-**Setup-Wizard**
+**Zugang geschlossen**
 
-<img src="https://via.placeholder.com/500x300/111827/f59e0b?text=Setup+Wizard" width="100%"/>
+<img src="screenshots/zugang-geschlossen.png" width="100%"/>
 
 </td>
 </tr>
 </table>
-
-> 📌 **Tipp:** Ersetze die Platzhalter durch echte Screenshots deines Systems.
 
 <br/>
 
@@ -519,7 +561,7 @@ Jeder Raum wird als eigenständiger Service betrieben. Die Anzahl der Räume ist
 <tr>
 <td>👤</td>
 <td><strong>Rollenbasiert</strong></td>
-<td>Mehrstufiges Berechtigungssystem (Level 1–10+)</td>
+<td>Mehrstufiges Berechtigungssystem (Level 1–10+), Mindest-Level pro Raum konfigurierbar</td>
 </tr>
 <tr>
 <td>🏢</td>
@@ -529,7 +571,17 @@ Jeder Raum wird als eigenständiger Service betrieben. Die Anzahl der Räume ist
 <tr>
 <td>⏰</td>
 <td><strong>Zugangszeiten</strong></td>
-<td>Zeitbasierte Zugangsbeschränkung mit Mittagspause & Override</td>
+<td>Öffnungs-/Schließzeiten mit Mittagspause & 5-Minuten-Freischaltung</td>
+</tr>
+<tr>
+<td>🚫</td>
+<td><strong>Anti-Tailgating</strong></td>
+<td>Cooldown & Gap-Erkennung verhindert unberechtigtes Nachlaufen</td>
+</tr>
+<tr>
+<td>🛡️</td>
+<td><strong>Brute-Force Schutz</strong></td>
+<td>Limitierte Versuche pro Zeitfenster (konfigurierbar)</td>
 </tr>
 <tr>
 <td>🗄️</td>
@@ -539,12 +591,7 @@ Jeder Raum wird als eigenständiger Service betrieben. Die Anzahl der Räume ist
 <tr>
 <td>📋</td>
 <td><strong>Audit-Logs</strong></td>
-<td>Jeder Zugang wird protokolliert und ist über Reports einsehbar</td>
-</tr>
-<tr>
-<td>🔄</td>
-<td><strong>API-Proxy</strong></td>
-<td>Mixed-Content-Schutz durch PHP-Proxy (HTTPS→HTTP)</td>
+<td>Jeder Zugang wird protokolliert — Events mit CHECK-IN, CHECK-OUT & ALARM</td>
 </tr>
 </table>
 
@@ -574,7 +621,7 @@ Jeder Raum wird als eigenständiger Service betrieben. Die Anzahl der Räume ist
 - [x] NFC/Smartcard Zutrittskontrolle
 - [x] Admin-Dashboard mit Multi-User Login
 - [x] Android APK mit QR & NFC Support
-- [x] Excel-Report Generator (7 Sheets)
+- [x] Excel-Report Generator (7 Sheets) & CSV-Export
 - [x] Broadcast & Pairing System
 - [x] NDEF-Schreibfunktion für NFC-Tags
 - [x] Gruppen-Verwaltung mit Farbzuordnung
@@ -584,6 +631,13 @@ Jeder Raum wird als eigenständiger Service betrieben. Die Anzahl der Räume ist
 - [x] **Broadcast-Tab** mit Live-Countdown
 - [x] **Per-Room Lockdown**
 - [x] **Zugangszeiten** mit Mittagspause & Override
+- [x] **WLED Matrix Integration** mit konfigurierbaren Farben
+- [x] **Anti-Tailgating & Brute-Force Schutz**
+- [x] **Gäste-System** mit Auto-Löschung
+- [x] **Tagesrhythmus** — automatische Akzentfarben
+- [x] **Wetter-Integration** (Lat/Lon pro Raum)
+- [x] **Emulator-Modus** für Reader-Simulation
+- [x] **Wochenreport** mit konfigurierbarem Report-Tag
 
 <br/>
 
