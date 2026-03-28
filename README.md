@@ -50,15 +50,15 @@ Entwickelt für den professionellen Einsatz — betrieben auf einem Raspberry Pi
 ### 🏢 Multi-Room-Architektur
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Bis%20zu-4%20Räume-22c55e?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/Unbegrenzte-Räume-22c55e?style=for-the-badge"/>
 </p>
 
+- **Unbegrenzt viele Räume** über den Setup-Wizard konfigurierbar
 - Jeder Raum läuft als **eigene Flask-Instanz** (`app.py`)
-- Konfigurierbare Ports: `5000`, `5100`, `5200`, `5300`
 - CLI-Steuerung: `--port`, `--room`, `--no-reader` (für Räume ohne Hardware)
-- **Per-Room Pairing** über eigene Pairing-Dateien (`pairing_5000.json`, etc.)
+- **Per-Room Pairing** über eigene Pairing-Dateien (`pairing_{port}.json`)
 - Jeder Monitor zeigt seinen eigenen **Raumnamen** an
-- Systemd-Services: `sicherheit-raum1` bis `sicherheit-raum4`
+- Automatische Systemd-Service-Erstellung pro Raum
 
 </td>
 <td width="50%" valign="top">
@@ -162,14 +162,14 @@ Entwickelt für den professionellen Einsatz — betrieben auf einem Raspberry Pi
 │                        main-max.local (HTTPS)                          │
 ├─────────────────────────────────────────────────────────────────────────┤
 │                                                                         │
-│   🏢 Multi-Room Flask Instanzen                                         │
-│   ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐     │
-│   │  Raum 1     │ │  Raum 2     │ │  Raum 3     │ │  Raum 4     │     │
-│   │  app.py     │ │  app.py     │ │  app.py     │ │  app.py     │     │
-│   │  :5000      │ │  :5100      │ │  :5200      │ │  :5300      │     │
-│   └──────┬──────┘ └──────┬──────┘ └──────┬──────┘ └──────┬──────┘     │
-│          │               │               │               │             │
-│          └───────────────┴───────┬───────┴───────────────┘             │
+│   🏢 Multi-Room Flask Instanzen (unbegrenzt)                            │
+│   ┌─────────────┐ ┌─────────────┐ ┌─────────────┐                     │
+│   │  Raum 1     │ │  Raum 2     │ │  Raum N     │                     │
+│   │  app.py     │ │  app.py     │ │  app.py     │     ...             │
+│   │  :5000      │ │  :5100      │ │  :5x00      │                     │
+│   └──────┬──────┘ └──────┬──────┘ └──────┬──────┘                     │
+│          │               │               │                             │
+│          └───────────────┴───────┬───────┘                             │
 │                                  │                                     │
 │   ┌──────────────┐    ┌──────────┴──────────┐    ┌──────────────────┐  │
 │   │ 🔑 webseite  │    │  🗄️ MariaDB         │    │ 🌐 Apache + PHP  │  │
@@ -307,10 +307,11 @@ sudo mysql -u root < sql/setup.sql
 sudo cp -r web/* /var/www/html/admin/
 sudo chown -R www-data:www-data /var/www/html/admin/
 
-# 5. Raum-Services starten
+# 5. Raum-Services starten (beliebig viele)
 python3 app.py --port 5000 --room "Eingang" &
 python3 app.py --port 5100 --room "Büro" &
 python3 app.py --port 5200 --room "Lager" --no-reader &
+# ... weitere Räume in 100er-Schritten
 python3 webseite-e.py &
 ```
 
@@ -330,14 +331,14 @@ sudo bash reset-deploy.sh
 
 ## 🏢 Multi-Room Konfiguration
 
-Jeder Raum wird als eigenständiger Service betrieben:
+Jeder Raum wird als eigenständiger Service betrieben. Die Anzahl der Räume ist **unbegrenzt** — neue Räume werden einfach über den Setup-Wizard oder manuell hinzugefügt:
 
 | Service | Port | CLI-Befehl |
 |:--|:--|:--|
 | `sicherheit-raum1` | 5000 | `python3 app.py --port 5000 --room "Eingang"` |
 | `sicherheit-raum2` | 5100 | `python3 app.py --port 5100 --room "Büro"` |
 | `sicherheit-raum3` | 5200 | `python3 app.py --port 5200 --room "Lager" --no-reader` |
-| `sicherheit-raum4` | 5300 | `python3 app.py --port 5300 --room "Werkstatt"` |
+| ... | +100 | Beliebig erweiterbar |
 | `admin-panel` | 5001 | `python3 webseite-e.py` |
 
 **CLI-Parameter:**
@@ -364,9 +365,7 @@ Jeder Raum wird als eigenständiger Service betrieben:
 ├── requirements.txt        # 📦 Python-Abhängigkeiten
 ├── setup.sh                # 🚀 Automatisches Setup-Script
 ├── reset-deploy.sh         # 🔄 Kompletter System-Reset & Deploy
-├── pairing_5000.json       # 🔗 Pairing-Datei Raum 1
-├── pairing_5100.json       # 🔗 Pairing-Datei Raum 2
-├── ...                     # 🔗 Weitere Pairing-Dateien
+├── pairing_*.json          # 🔗 Pairing-Dateien pro Raum (auto-generiert)
 │
 ├── web/
 │   ├── index.php           # 🖥️ Admin-Dashboard (Login + Verwaltung)
@@ -579,15 +578,12 @@ Jeder Raum wird als eigenständiger Service betrieben:
 - [x] Broadcast & Pairing System
 - [x] NDEF-Schreibfunktion für NFC-Tags
 - [x] Gruppen-Verwaltung mit Farbzuordnung
-- [x] **Multi-Room-Architektur** (bis zu 4 Räume)
+- [x] **Multi-Room-Architektur** (unbegrenzt viele Räume)
 - [x] **Setup-Wizard** (setup.sh + setup.php)
 - [x] **QR-Karten Drucktool** (Layouts 1–9 pro A4)
 - [x] **Broadcast-Tab** mit Live-Countdown
 - [x] **Per-Room Lockdown**
 - [x] **Zugangszeiten** mit Mittagspause & Override
-- [ ] iOS-Support (PWA)
-- [ ] Biometrische Authentifizierung
-- [ ] E-Mail-Benachrichtigungen
 
 <br/>
 
